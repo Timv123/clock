@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>socket.io clock</title>
+  <link rel="stylesheet" media="screen" href="index.css">
+  <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+    <script>
+    $(function() {
+
+      var socket = io.connect('http://localhost')
+
+      socket.on('tick', function (data) {
+        console.log(data)
+        $('#clock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+      });
+
+
+      socket.on('countdown', function (data) {
+        console.log(data)
+        $('.countdown').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+      });
+
+
+    })
+  </script>
+  
+</head>
+<body>
+  <h3>Start Time</h3>
+  <h1 id="clock"></h1>
+
+  <h3>Countdown</h3>
+  <h1 class= "countdown" id="clock"></h1>
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>socket.io clock</title>
+    <!-- Bootstrap stylesheet -->
+  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+
+  <!-- ClockPicker Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
+
+  <link rel="stylesheet" media="screen" href="index.css">
+  <script type="text/javascript" src="assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+  <!-- jQuery and Bootstrap scripts -->
+  <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+
+  <!-- ClockPicker script -->
+  <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
+
+
+  <script type="text/javascript" src="admin.js"></script>
+
+
+
+  
+</head>
+<body>
+
+<div><h3>Start Time</h3></div>
+<div class="input-group startTime">
+    <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>       
+    </span>
+</div>
+
+
+
+<div><h3>Countdown</h3></div>
+<div class="input-group countDown">
+    <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>
+    </span>
+</div>
+
+<div>
+    <button id="playButton" type="button" class="btn btn-lg">
+        <span class="glyphicon glyphicon-play"></span>
+    </button>
+
+     <button id="pauseButton" type="button" class="btn btn-lg">
+        <span class="glyphicon glyphicon-pause"></span>
+    </button>
+
+    <button id="pauseButton" type="button" class="btn btn-lg">
+        <span class="glyphicon glyphicon-stop"></span>
+    </button>
+</div>
+
+</body>
+
+
+</html>
