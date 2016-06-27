@@ -14,19 +14,14 @@
 
   <!-- jQuery and Bootstrap scripts -->
   <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
-
   <!-- ClockPicker script -->
   <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
-
-
   <script type="text/javascript" src="admin.js"></script>
-
-
-
   
 </head>
 <body>
 
+<!-- Start Time -->
 <div><h3>Start Time</h3></div>
 <div class="input-group startTime">
     <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
@@ -36,7 +31,7 @@
 </div>
 
 
-
+<!-- Countdown -->
 <div><h3>Countdown</h3></div>
 <div class="input-group countDown">
     <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
@@ -45,6 +40,7 @@
     </span>
 </div>
 
+<!-- Play - Pause - Stop -->
 <div>
     <button id="playButton" type="button" class="btn btn-lg">
         <span class="glyphicon glyphicon-play"></span>
@@ -54,10 +50,26 @@
         <span class="glyphicon glyphicon-pause"></span>
     </button>
 
-    <button id="pauseButton" type="button" class="btn btn-lg">
+    <button id="stopButton" type="button" class="btn btn-lg">
         <span class="glyphicon glyphicon-stop"></span>
     </button>
 </div>
+
+<!-- Modal -->
+  <div class="modal fade" id="emptyField" role="dialog">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Empty field!!</h4>
+        </div>
+        <div class="modal-body">
+          <p>Missing field input, select a time before pressing play.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 

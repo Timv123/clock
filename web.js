@@ -14,19 +14,6 @@ app.use(express.static(__dirname + "/public"))
 app.use('/admin',express.static(__dirname + "/public",{index: 'admin.html'}))
 
 
-//endpoint router to set clock time
-app.get('/settime', function (req, res) {
-  res.send('GET request to homepage');
-});
-
-
-//endpoint router to set clock time
-app.get('/pause/:id', function (req, res) {
-  var id = req.params.id;
-  res.send('id: ' + console.log(id));
-});
-
-
 var socket = io.listen(server)
 socket.configure(function () { 
   socket.set("transports", ["xhr-polling"]) 
@@ -51,15 +38,17 @@ function getTimeRemaining(endtime) {
 
 socket.sockets.on("connection", function (socket) {
 
-  socket.on('tick',function(data){
+  socket.on('countDown',function(data){
 
+   console.log('in the countDown');
   // seperate the incoming hours and minutes
   var timeStrArray = data.split(":");
   var hour = timeStrArray[0];
   var minute = timeStrArray[1];
 
-
+  //add hours and minutes to current time
   var deadline = new Date(Date.parse(new Date()) + (hour * 60 * 60 * 1000) + (1000 * 60 * minute));
+
 
   function updateClock() {   
 
@@ -68,23 +57,23 @@ socket.sockets.on("connection", function (socket) {
       clearInterval(timeinterval);
     }
 
+    var displayTime = moment();
+        displayTime.hours(t.hours);
+        displayTime.minutes(t.minutes);
+        displayTime.seconds(t.seconds);
 
+    console.log('in the ' + displayTime.toDate());
 
-    var timeRemaining = t.hours + "" + t.minutes + "" + t.seconds
-
-    console.log('in the hour ' + timeRemaining);
-
-
-    socket.broadcast.emit("tick", {time: moment(timeRemaining, 'hh:mm:ss').format('h:mm:ss ')});
+    socket.broadcast.emit("countDown", {time: moment(displayTime.toDate()).format('hh:mm:ss')});
 
   }
     //updateClock();
     var timeinterval = setInterval(updateClock, 1000);
 	});
 
-  socket.on('countDown',function(data){
-    console.log('in the countdown ' + data);
-    socket.broadcast.emit("countdown", {time: moment(data, 'hhmmss').format('HH:mm')});
+  socket.on('startTime',function(data){
+    console.log('in the startTime ' + data);
+    socket.broadcast.emit("startTime", {time: moment(data, 'hhmmss').format('HH:mm')});
   });
 	
 })

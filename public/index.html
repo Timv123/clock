@@ -10,13 +10,13 @@
 
       var socket = io.connect('http://localhost')
 
-      socket.on('tick', function (data) {
+      socket.on('startTime', function (data) {
         console.log(data)
         $('#clock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
 
 
-      socket.on('countdown', function (data) {
+      socket.on('countDown', function (data) {
         console.log(data)
         $('.countdown').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
@@ -27,10 +27,12 @@
   
 </head>
 <body>
+  
+  
   <h3>Start Time</h3>
   <h1 id="clock"></h1>
 
-  <h3>Countdown</h3>
+  <h3>Countdown Time</h3>
   <h1 class= "countdown" id="clock"></h1>
 </body>
 </html>
