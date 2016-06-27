@@ -53,30 +53,29 @@ socket.sockets.on("connection", function (socket) {
 
   socket.on('tick',function(data){
 
+  // seperate the incoming hours and minutes
   var timeStrArray = data.split(":");
   var hour = timeStrArray[0];
   var minute = timeStrArray[1];
 
+
   var deadline = new Date(Date.parse(new Date()) + (hour * 60 * 60 * 1000) + (1000 * 60 * minute));
 
-  function updateClock() {
-    
-    var t = getTimeRemaining(deadline);
+  function updateClock() {   
 
+    var t = getTimeRemaining(deadline);
     if (t.total <= 0) {
       clearInterval(timeinterval);
     }
 
-    
 
-    //var dd = new Date(Date.parse(data1));
-    console.log('in the hour ' + hour);
-    console.log('in the hours ' + t.hours);
-    console.log('in the minute ' + t.minutes);
-    console.log('in the moment ' + t.seconds);
-    console.log('in the dead ' + deadline);
 
-    //socket.broadcast.emit("tick", {time: moment(data1, 'hmm').format('HH:mm')});
+    var timeRemaining = t.hours + "" + t.minutes + "" + t.seconds
+
+    console.log('in the hour ' + timeRemaining);
+
+
+    socket.broadcast.emit("tick", {time: moment(timeRemaining, 'hh:mm:ss').format('h:mm:ss ')});
 
   }
     //updateClock();
@@ -85,7 +84,7 @@ socket.sockets.on("connection", function (socket) {
 
   socket.on('countDown',function(data){
     console.log('in the countdown ' + data);
-    socket.broadcast.emit("countdown", {time: moment(data, 'hmm').format('HH:mm')});
+    socket.broadcast.emit("countdown", {time: moment(data, 'hhmmss').format('HH:mm')});
   });
 	
 })
