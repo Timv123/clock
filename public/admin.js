@@ -2,103 +2,128 @@
 
     //establish websocket connection
     var socket = io.connect('http://localhost');
-    
-    
+    var stopWatchClock = new stopwatch();
+
 
     $('.startTime').clockpicker({
         donetext: 'Done'
     });
 
-
-    $('.countDown').clockpicker({
-        donetext: 'Done'
-    });
-    
-    
-    $('#stopButton').on('click', function() {
-        
-        var stop = new stopwatch();
-        
-        stop.start();
-    });
-    
-    $('#playButton').on('click', function() {
-        
-        var stop = new stopwatch();
-        
-        stop.start();
-    });
-    
-    $('#pauseButton').on('click', function() {
-        
-        var stop = new stopwatch();
-        
-        stop.start();
+    $('#stopButton').on('click', function () {
+        stopWatchClock.stopping();
     });
 
-  
+    $('#playButton').on('click', function () {
+        stopWatchClock.playing();
+    });
+
+    $('#pauseButton').on('click', function () {
+        stopWatchClock.pausing();
+    });
+
+
     function stopwatch() {
 
-        var currentState = new Play(this);
+        this.currentState = new Stop(this);
+        this.pausedTime;
 
-        this.change = function (state) {
+        this.changeState = function (state) {
             this.currentState = state;
         };
 
-        this.start = function () {
-            currentState.initialize();
-            currentState.execute();
+        this.stopping = function () {
+            this.currentState.stop(this);
         }
+
+        this.playing = function () {
+            this.currentState.play(this);
+        }
+
+        this.pausing = function () {
+            this.currentState.pause(this);
+        }
+        
+        this.setPausedTime = function(pauseTime){
+            this.pausedTime = pauseTime;
+        }
+        this.getPausedTime = function(){
+            return pausedTime;
+        }
+        
+        this.getPlayState = function(){
+            return new Play(this);
+        }
+        
+        this.getStopState = function (){
+            return new Stop(this);
+        }
+
+        this.getPauseState = function() {
+            return new Pause(this);
+        }
+
 
     };
 
-    function Play(state) {
-        
-        this.state = state;
-        var startTimeInput, startTime, countdownInput, countTime;
-        
-        this.initialize = function(){
-            
-             startTimeInput = $('.startTime').clockpicker().find('input');
-             startTime = startTimeInput[0].value;
-             countdownInput = $('.countDown').clockpicker().find('input');
-             countTime = countdownInput[0].value;
-            
+    function Play() {
+        var startTimeInput, startTime;
+        this.initialize = function () {
+            startTimeInput = $('.startTime').clockpicker().find('input');
+            startTime = startTimeInput[0].value;
         };
-        
-        
-        this.execute = function () {
+
+        this.play = function (stopwatch) {
+            this.stopwatch = stopwatch;
+            this.initialize();
+            this.stopwatch.changeState(this.stopwatch.getPlayState());
             
-            if((startTime || countTime) == "" ){
-                  $('#emptyField').modal('show');
+            if (startTime == "") {
+                $('#emptyField').modal('show');
             }
-            else{
-                 socket.emit('startTime', startTime);
-                 socket.emit('countDown', countTime);
+            else {
+                socket.emit('startTime', startTime);
             }
-                
-            
+        }
+        
+        this.pause = function (stopwatch){
+             socket.emit('pauseTime');  
         }
 
     };
-    
-    function Stop(state) {
-        this.state = state;
 
-        this.execute = function () {
+    function Stop() {
+        this.stop = function () {
             $('#myModal').modal('show');
         }
-
-    };
-
-    function Pause(state) {
-        this.state = state;
-
-        this.execute = function () {
-            console.log('execute puase');
+        
+        this.play = function (stopwatch){       
+                           
+           stopwatch.changeState(stopwatch.getPlayState());
+           stopwatch.playing();
         }
     };
 
+    function Pause() {
+        var pausedTime;
+        this.initialize = function (callback) {
+                      
+            socket.on('countDown',function(data){
+                stopWatchClock.setPausedTime = data.time;
+                console.log('in paused time' + stopWatchClock.getPausedTime);    
+                
+                 $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))                       
+               // socket.emit('pausedTime');                        
+            });
+            
+             
+            
+            console.log('out of pausedTime'+ pausedTime);
+        }
+        this.pause = function () {
+            this.initialize();
+            console.log('pausedTime funtion' + pausedTime);
+        }
+    };
 
 });
 
