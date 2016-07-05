@@ -14,7 +14,8 @@ app.use(express.static(__dirname + "/public"))
 app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' }))
 
 
-var socket = io.listen(server)
+var socket = io.listen(server);
+
 socket.configure(function () {
   socket.set("transports", ["xhr-polling"])
   socket.set("polling duration", 10)
@@ -25,10 +26,10 @@ socket.sockets.on("connection", function (socket) {
 
   var timeinterval;
   var countDownTime;
-  var d;
+  var pausedTime;
 
   socket.on('startTime', function (data) {
-    d =data;
+
     // seperate the incoming hours and minutes
     var timeStrArray = data.split(":");
     var inputHour = timeStrArray[0];
@@ -63,25 +64,33 @@ socket.sockets.on("connection", function (socket) {
   });
 
   socket.on('pauseTime', function () {
-    
     //stop broadcasting countDown time
     clearInterval(timeinterval);
-    var d = moment();
-    
-    
-    function pauseTimeClock (){
-      console.log(moment().hour());
-      console.log(d.minute());
-     // socket.broadcast.emit("pauseTimeClock", { time: moment(data, 'hhmmss').format('HH:mm') });
 
+    function pauseTimeClock() {
+      pausedTime = moment();
+      var timeDiffHour = moment().hour() - pausedTime.hour();
+      var timeDiffMinute = moment().minute() - pausedTime.minute();
+      var timeDiffSec = moment().second();
+
+      var displayTime = timeDiffHour + ":" + timeDiffMinute + ":" + timeDiffSec;
+
+      socket.broadcast.emit("pauseTimeClock", { time: moment(displayTime, 'hhmmss').format('HH:mm:ss') });
+
+      console.log(timeDiffHour);
+      console.log(timeDiffMinute);
     }
-    
+
     setInterval(pauseTimeClock, 1000);
 
-    
   })
 
 });
+
+function pausingTime() {
+
+
+}
 
 function getTimeRemaining(endtime) {
   var t = Date.parse(endtime) - Date.parse(new Date());

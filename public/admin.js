@@ -86,7 +86,14 @@
         }
         
         this.pause = function (stopwatch){
+             this.stopwatch = stopwatch;
+             this.stopwatch.changeState(this.stopwatch.getPauseState());
              socket.emit('pauseTime');  
+             console.log('puased time ');
+              socket.on('pauseTimeClock', function(data){
+                $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))       
+                console.log(data.time);       
+            })
         }
 
     };
@@ -110,15 +117,17 @@
             socket.on('countDown',function(data){
                 stopWatchClock.setPausedTime = data.time;
                 console.log('in paused time' + stopWatchClock.getPausedTime);    
-                
-                 $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))                       
-               // socket.emit('pausedTime');                        
+                    
+                //socket.emit('pauseTime');                        
             });
             
-             
-            
-            console.log('out of pausedTime'+ pausedTime);
         }
+        
+        this.play = function(){
+            
+            console.log('in pause state with empty funciton')
+        }
+        
         this.pause = function () {
             this.initialize();
             console.log('pausedTime funtion' + pausedTime);
