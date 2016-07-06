@@ -22,6 +22,12 @@
     });
 
 
+    socket.on('pauseTimeClock', function (data) {
+        stopWatchClock.setPausedTime(data.time);
+        $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+        console.log(stopWatchClock.pausedTime);
+    });
+
     function stopwatch() {
 
         this.currentState = new Stop(this);
@@ -42,26 +48,22 @@
         this.pausing = function () {
             this.currentState.pause(this);
         }
-        
-        this.setPausedTime = function(pauseTime){
-            this.pausedTime = pauseTime;
+
+        this.setPausedTime = function(pauseTime) {
+            this.pausedTime = pauseTime
         }
-        this.getPausedTime = function(){
-            return pausedTime;
-        }
-        
-        this.getPlayState = function(){
+
+        this.getPlayState = function () {
             return new Play(this);
         }
-        
-        this.getStopState = function (){
+
+        this.getStopState = function () {
             return new Stop(this);
         }
 
-        this.getPauseState = function() {
+        this.getPauseState = function () {
             return new Pause(this);
         }
-
 
     };
 
@@ -76,7 +78,7 @@
             this.stopwatch = stopwatch;
             this.initialize();
             this.stopwatch.changeState(this.stopwatch.getPlayState());
-            
+
             if (startTime == "") {
                 $('#emptyField').modal('show');
             }
@@ -84,16 +86,14 @@
                 socket.emit('startTime', startTime);
             }
         }
-        
-        this.pause = function (stopwatch){
-             this.stopwatch = stopwatch;
-             this.stopwatch.changeState(this.stopwatch.getPauseState());
-             socket.emit('pauseTime');  
-             console.log('puased time ');
-              socket.on('pauseTimeClock', function(data){
-                $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))       
-                console.log(data.time);       
-            })
+
+        this.pause = function (stopwatch) {
+            this.stopwatch = stopwatch;
+
+            socket.emit('pauseTime');
+
+            console.log('outside of puase');
+            this.stopwatch.changeState(this.stopwatch.getPauseState());
         }
 
     };
@@ -102,34 +102,25 @@
         this.stop = function () {
             $('#myModal').modal('show');
         }
+
+        this.play = function (stopwatch) {
+            stopwatch.changeState(stopwatch.getPlayState());
+            stopwatch.playing();
+        }
         
-        this.play = function (stopwatch){       
-                           
-           stopwatch.changeState(stopwatch.getPlayState());
-           stopwatch.playing();
+         this.pause = function () {
+            console.log('STOP :pausedTime funtion' );
         }
     };
 
     function Pause() {
         var pausedTime;
-        this.initialize = function (callback) {
-                      
-            socket.on('countDown',function(data){
-                stopWatchClock.setPausedTime = data.time;
-                console.log('in paused time' + stopWatchClock.getPausedTime);    
-                    
-                //socket.emit('pauseTime');                        
-            });
-            
+    
+        this.play = function () {
+            socket.emit('startTime', stopWatchClock.pausedTime);
         }
-        
-        this.play = function(){
-            
-            console.log('in pause state with empty funciton')
-        }
-        
+
         this.pause = function () {
-            this.initialize();
             console.log('pausedTime funtion' + pausedTime);
         }
     };

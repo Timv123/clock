@@ -26,7 +26,6 @@ socket.sockets.on("connection", function (socket) {
 
   var timeinterval;
   var countDownTime;
-  var pausedTime;
 
   socket.on('startTime', function (data) {
 
@@ -66,16 +65,18 @@ socket.sockets.on("connection", function (socket) {
   socket.on('pauseTime', function () {
     //stop broadcasting countDown time
     clearInterval(timeinterval);
+    
+    var pausedTime = moment();
 
     function pauseTimeClock() {
-      pausedTime = moment();
+     
       var timeDiffHour = moment().hour() - pausedTime.hour();
       var timeDiffMinute = moment().minute() - pausedTime.minute();
       var timeDiffSec = moment().second();
 
       var displayTime = timeDiffHour + ":" + timeDiffMinute + ":" + timeDiffSec;
 
-      socket.broadcast.emit("pauseTimeClock", { time: moment(displayTime, 'hhmmss').format('HH:mm:ss') });
+      socket.broadcast.emit("pauseTimeClock", { time: moment(displayTime, 'hhmm').format('HH:mm') });
 
       console.log(timeDiffHour);
       console.log(timeDiffMinute);
