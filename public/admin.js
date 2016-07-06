@@ -69,6 +69,7 @@
 
     function Play() {
         var startTimeInput, startTime;
+        
         this.initialize = function () {
             startTimeInput = $('.startTime').clockpicker().find('input');
             startTime = startTimeInput[0].value;
@@ -94,6 +95,8 @@
 
             console.log('outside of puase');
             this.stopwatch.changeState(this.stopwatch.getPauseState());
+            
+            socket.socket.reconnect();
         }
 
     };

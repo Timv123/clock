@@ -76,7 +76,7 @@ socket.sockets.on("connection", function (socket) {
 
       var displayTime = timeDiffHour + ":" + timeDiffMinute + ":" + timeDiffSec;
 
-      socket.broadcast.emit("pauseTimeClock", { time: moment(displayTime, 'hhmm').format('HH:mm') });
+      socket.emit("pauseTimeClock", { time: moment(displayTime, 'hhmm').format('HH:mm') });
 
       console.log(timeDiffHour);
       console.log(timeDiffMinute);
