@@ -21,17 +21,44 @@
         stopWatchClock.pausing();
     });
 
-
     socket.on('pauseTimeClock', function (data) {
         stopWatchClock.setPausedTime(data.time);
-        $('.pauseTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+        $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
         console.log(stopWatchClock.pausedTime);
     });
+    
+    socket.on('replayClock', function (data) {
+         socket.emit('startTime', data);
+    });
+    
+    function getUserTimeInput (){
+       var userInputStartTime = $('.startTime').clockpicker().find('input');      
+       return userInputStartTime;
+    }
+    
+    function parseTimeInputToDateObj (time){
+   
+        var timeStrArray = time[0].value.split(":");
+        var inputHour = parseInt(timeStrArray[0]);
+        var inputMinute = parseInt(timeStrArray[1]);
+        
+        var date = new Date();
+        date.setHours(inputHour);
+        date.setMinutes(inputMinute);
+        return date;
+    }
+    
+    function addToCurrentTime (crntTime, addTime) {
+        
+        this.crntTime = crntTime;
+        this.addTime = addTime;      
+    }
 
     function stopwatch() {
 
         this.currentState = new Stop(this);
         this.pausedTime;
+        this.startTime;
 
         this.changeState = function (state) {
             this.currentState = state;
@@ -52,6 +79,10 @@
         this.setPausedTime = function(pauseTime) {
             this.pausedTime = pauseTime
         }
+        
+         this.setStartTime = function(startTime) {
+            this.startTime = startTime
+        }
 
         this.getPlayState = function () {
             return new Play(this);
@@ -68,63 +99,65 @@
     };
 
     function Play() {
-        var startTimeInput, startTime;
+        var startTimeInput, inputTime,dateObj;
         
-        this.initialize = function () {
-            startTimeInput = $('.startTime').clockpicker().find('input');
-            startTime = startTimeInput[0].value;
-        };
-
         this.play = function (stopwatch) {
-            this.stopwatch = stopwatch;
-            this.initialize();
-            this.stopwatch.changeState(this.stopwatch.getPlayState());
-
-            if (startTime == "") {
-                $('#emptyField').modal('show');
-            }
-            else {
-                socket.emit('startTime', startTime);
-            }
+             $('#inPlay').modal('show');
         }
 
         this.pause = function (stopwatch) {
             this.stopwatch = stopwatch;
+            this.stopwatch.changeState(this.stopwatch.getPauseState());
 
             socket.emit('pauseTime');
 
-            console.log('outside of puase');
-            this.stopwatch.changeState(this.stopwatch.getPauseState());
-            
-            socket.socket.reconnect();
         }
 
     };
 
     function Stop() {
-        this.stop = function () {
-            $('#myModal').modal('show');
+       
+
+        this.initialize = function () {
+            inputTime = getUserTimeInput();
+            dateObj = parseTimeInputToDateObj(inputTime);  
+        };
+        
+         this.stop = function () {
+             $('#notActive').modal('show');
         }
 
         this.play = function (stopwatch) {
-            stopwatch.changeState(stopwatch.getPlayState());
-            stopwatch.playing();
+            this.initialize();
+            this.stopwatch = stopwatch;
+            this.stopwatch.changeState(this.stopwatch.getPlayState());
+
+            if (inputTime[0].value == "") {
+                $('#emptyField').modal('show');
+            }
+            else {
+                console.log(dateObj.getMinutes());
+                socket.emit('startTime', dateObj.valueOf());
+            }
         }
         
          this.pause = function () {
-            console.log('STOP :pausedTime funtion' );
+              $('#notActive').modal('show');
         }
     };
 
     function Pause() {
-        var pausedTime;
     
-        this.play = function () {
-            socket.emit('startTime', stopWatchClock.pausedTime);
+        this.play = function (stopwatch) {     
+            this.stopwatch = stopwatch;            
+            this.stopwatch.changeState(this.stopwatch.getPlayState());   
+            
+            socket.emit('restartTime'); 
+           
         }
 
         this.pause = function () {
-            console.log('pausedTime funtion' + pausedTime);
+             $('#notActive').modal('show');
         }
     };
 
