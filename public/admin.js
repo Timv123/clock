@@ -3,7 +3,7 @@
     //establish websocket connection
     var socket = io.connect('http://localhost');
     var stopWatchClock = new stopwatch();
-
+    console.log(socket);
 
     $('.startTime').clockpicker({
         donetext: 'Done'
@@ -111,6 +111,13 @@
 
             socket.emit('pauseTime');
 
+        }
+        
+        this.stop = function (stopwatch) {
+             this.stopwatch = stopwatch;
+             this.stopwatch.changeState(this.stopwatch.getStopState());
+             socket.emit('stopTime');
+             console.log('stopping');
         }
 
     };

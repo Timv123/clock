@@ -5,7 +5,11 @@ var io = require('socket.io');
 var moment = require("moment");
 
 
-server.listen(80);
+server.listen(7000);
+
+if (process.env.NODE_INSPECTOR) {
+
+}
 
 //Use to serve up static files within public directory
 app.use(express.static(__dirname + "/public"))
@@ -13,23 +17,27 @@ app.use(express.static(__dirname + "/public"))
 //Points to admin.html instead of the default index.html
 app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' }))
 
-
 var socket = io.listen(server);
 
 socket.configure(function () {
   socket.set("transports", ["xhr-polling"])
   socket.set("polling duration", 10)
   socket.set("log level", 1)
-})
+});
 
-  
+
+
 socket.sockets.on("connection", function (socket) {
-
 
   var startTimeinterval, pauseTimeinterval, countDownTime, pausedTime, startTime;
 
+  if (socketId.length > 1) {
+    socket.namespace.sockets[socketId[0].id].disconnect();
+    socketId.shift();
+    socketId.push(socket);
+  }
+  
   socket.on('startTime', function (timeValue) {
-
     var counter = 0;
     startTime = timeValue;
 
@@ -39,9 +47,7 @@ socket.sockets.on("connection", function (socket) {
       if (t.total <= 0) {
         clearInterval(startTimeinterval);
       }
-
       countDownTime = moment().hour(t.hours).minute(t.minutes).second(counter--);
-
       //format time for display                    
       socket.broadcast.emit("currentTime", { time: moment().format('HH:mm:ss') });
       socket.broadcast.emit("countDown", { time: countDownTime.format('HH:mm:ss') });
@@ -68,11 +74,11 @@ socket.sockets.on("connection", function (socket) {
   })
 
   socket.on('restartTime', function () {
-  
+
     var startTimeObj = moment(startTime);
-    startTimeObj.add(pausedTime.hour, 'hours');
-    startTimeObj.add(pausedTime.minute(),'minutes');
-    
+    startTimeObj.add(pausedTime.hour(), 'hours');
+    startTimeObj.add(pausedTime.minute(), 'minutes');
+
     //parse momentjs object to Date.valueOf object in milliseconds
     var restartValue = startTimeObj.utc().valueOf();
 
@@ -80,13 +86,26 @@ socket.sockets.on("connection", function (socket) {
     clearInterval(pauseTimeinterval);
 
   })
-  
+
   socket.on('stopTime', function () {
-    
-  })
+    console.log('Got stopped!');
+    clearInterval(startTimeinterval);
+    clearInterval(pauseTimeinterval);
+  });
 
 });
 
+function RemoveListener(socket) {
+
+  var socketId = [];
+
+  if (socketId.length > 1) {
+    socket.namespace.sockets[socketId[0].id].disconnect();
+    socketId.shift();
+    socketId.push(socket);
+  }  
+
+}
 
 function getTimeRemaining(endtime) {
   var t = endtime - Date.parse(new Date());
