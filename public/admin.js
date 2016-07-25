@@ -21,20 +21,26 @@
         stopWatchClock.pausing();
     });
     
-
+    
+/************************************************************************************************
+ ***  socket listener events  ********************************************************************
+ ************************************************************************************************/
     socket.on('pauseTimeClock', function (data) {
         stopWatchClock.setPausedTime(data.time);
         $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
-        console.log(stopWatchClock.pausedTime);
     });
     
-    socket.on('replayClock', function (data) {
+    socket.on('restartClock', function (data) {
          socket.emit('startTime', data);
     });
     
      socket.on('invalidTimeAlert', function () {
          $('#timeError').modal('show');
     });
+    
+/************************************************************************************************
+ ***  Clock Play, Pause, Stop states  ************************************************************
+ ************************************************************************************************/    
     function getUserTimeInput (){
        var userInputStartTime = $('.startTime').clockpicker().find('input');      
        return userInputStartTime;
@@ -53,14 +59,12 @@
         return date;
     }
     
-    function addToCurrentTime (crntTime, addTime) {
-        
+    function addToCurrentTime (crntTime, addTime) {       
         this.crntTime = crntTime;
         this.addTime = addTime;      
     }
 
     function stopwatch() {
-
         this.currentState = new Stop(this);
         this.pausedTime;
         this.startTime;
@@ -100,11 +104,10 @@
         this.getPauseState = function () {
             return new Pause(this);
         }
-
     };
 
     function Play() {
-        var startTimeInput, inputTime,dateObj;
+        var startTimeInput, inputTime, dateObj;
         
         this.play = function (stopwatch) {
              $('#inPlay').modal('show');
@@ -113,23 +116,18 @@
         this.pause = function (stopwatch) {
             this.stopwatch = stopwatch;
             this.stopwatch.changeState(this.stopwatch.getPauseState());
-
             socket.emit('pauseTime');
-
         }
         
         this.stop = function (stopwatch) {
              this.stopwatch = stopwatch;
              this.stopwatch.changeState(this.stopwatch.getStopState());
              socket.emit('stopTime');
-             console.log('stopping');
         }
 
     };
 
     function Stop() {
-       
-
         this.initialize = function () {
             inputTime = getUserTimeInput();
             dateObj = parseTimeInputToDateObj(inputTime);  
@@ -148,24 +146,20 @@
                 $('#emptyField').modal('show');
             }
             else {
-                console.log(dateObj.getMinutes());
                 socket.emit('startTime', dateObj.valueOf());
             }
-        }
-        
+        }       
          this.pause = function () {
               $('#notActive').modal('show');
         }
     };
 
     function Pause() {
-    
+  
         this.play = function (stopwatch) {     
             this.stopwatch = stopwatch;            
-            this.stopwatch.changeState(this.stopwatch.getPlayState());   
-            
-            socket.emit('restartTime'); 
-           
+            this.stopwatch.changeState(this.stopwatch.getPlayState());            
+            socket.emit('restartTime');        
         }
 
         this.pause = function () {
@@ -176,7 +170,6 @@
              this.stopwatch = stopwatch;
              this.stopwatch.changeState(this.stopwatch.getStopState());
              socket.emit('stopTime');
-             console.log('stopping');
         }
     };
 

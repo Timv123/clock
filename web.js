@@ -5,7 +5,9 @@ var io = require('socket.io');
 var moment = require("moment");
 
 
-var pauseFunction = require('./services/pause');
+var pauseFunc = require('./services/pause');
+var playFunc = require('./services/play');
+
 
 server.listen(7000);
 
@@ -23,123 +25,60 @@ socket.configure(function () {
   socket.set("log level", 1)
 });
 
-var oldSocket, startTimeinterval;
 
 socket.sockets.on("connection", function (socket) {
  
-   var pauseTimeinterval, countDownTime, pausedTime, startTime;
-
-
   socket.on('startTime', function (timeValue) {
-    
-    checkValidTime(socket, timeValue);
-    startTime = timeValue;
-    
-    if (oldSocket !== socket.id) {
-     clearInterval(startTimeinterval);
-     console.log('oldsocket' + oldSocket);
-     console.log('socketid' + socket.id);
-   }
 
-    oldSocket = socket.id;
-
-    function updateClock() {
-      var t = getTimeRemaining(timeValue);
-      //reset when time runs out
-      if (t.total <= 0) {
-        clearInterval(startTimeinterval);
-        console.log(t.minute);
-      }
-      countDownTime = moment().hour(t.hours).minute(t.minutes).second(t.seconds --);
-      //format time for display                    
-      socket.broadcast.emit("currentTime", { time: moment().format('HH:mm:ss') });
-      socket.broadcast.emit("countDown", { time: countDownTime.format('HH:mm:ss') });
-      socket.broadcast.emit("startTime", { time: moment(timeValue).format('HH:mm') });
-    }
-    startTimeinterval = setInterval(updateClock, 1000);
+    playFunc.setSocket(socket); 
+    playFunc.setAsNewRequest();
+    
+    playFunc.inputTimeValidation();
+    playFunc.updateClock(timeValue);
+    playFunc.activateStartInterval();
 
   });
 
   socket.on('pauseTime', function () {
-    //stop broadcasting countDown time
-    clearInterval(startTimeinterval);
+    //stop timer 
+    playFunc.clearStartTimeInterval();
        
-    pauseFunction.setSocket(this);
-    pauseFunction.pauseTimeClock();    
-    pauseFunction.activatePauseInterval();
-    pauseFunction.resetClock();
+    pauseFunc.setSocket(this);
+    pauseFunc.pauseTimeClock();    
+    pauseFunc.activatePauseInterval();
+    pauseFunc.resetClockToZero();
+    
   })
 
   socket.on('restartTime', function () {
-
-    var startTimeObj = moment(startTime);
-    startTimeObj.add(pausedTime.hour(), 'hours');
-    startTimeObj.add(pausedTime.minute(), 'minutes');
+    var inputTimeValue = playFunc.getInputStartTime();
+    var pausedTime = pauseFunc.getPausedTime();
+    var restartTimeVal = moment(inputTimeValue);   
+    
+    restartTimeVal.add(pausedTime.hour(), 'hours');
+    restartTimeVal.add(pausedTime.minute(), 'minutes');
 
     //parse momentjs object to Date.valueOf object in milliseconds
-    var restartValue = startTimeObj.utc().valueOf();
+    var restartTime = restartTimeVal.utc().valueOf();
 
-    socket.emit('replayClock', restartValue);
-    clearInterval(pauseTimeinterval);
+    socket.emit('restartClock', restartTime);
+    
+    pauseFunc.clearPauseInterval();
 
   })
 
   socket.on('stopTime', function () {
-    console.log('Got stopped!');
-    clearInterval(startTimeinterval);
-    clearInterval(pauseTimeinterval);
+    
+    playFunc.clearStartTimeInterval();
+    pauseFunc.resetClockToZero();
+    pauseFunc.clearPauseInterval();
+
   });
 
 });
 
 
 
-function checkValidTime (socket, timeValue){
-   var currentTime = Date.parse(new Date());
-   var validTime = timeValue - currentTime;
-   
-    if(validTime < 0){
-      socket.emit('invalidTimeAlert');
-    }
-};
-
-function RemoveListener(socket) {
-
-  var socketId = [];
-
-  if (socketId.length > 1) {
-    socket.namespace.sockets[socketId[0].id].disconnect();
-    socketId.shift();
-    socketId.push(socket);
-  }  
-}
-
-function getTimeRemaining(endtime) {
-  var t = endtime - Date.parse(new Date());
-  var seconds = Math.floor((t / 1000) % 60);
-  var minutes = Math.floor((t / 1000 / 60) % 60);
-  var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
-  var days = Math.floor(t / (1000 * 60 * 60 * 24));
-
-  //format hour, minute, second with "0" added
-  if (hours.toString().length < 2 || hours < 1) {
-    hours = "0" + hours;
-  }
-  if (minutes.toString().length < 2) {
-    minutes = "0" + minutes;
-  }
-  if (seconds.toString().length < 2) {
-    seconds = "0" + seconds;
-  }
-
-  return {
-    'total': t,
-    'days': days,
-    'hours': hours,
-    'minutes': minutes,
-    'seconds': seconds
-  };
-}
 
 
 

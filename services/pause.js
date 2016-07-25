@@ -4,11 +4,19 @@ function pause() {
   
   var counter = 0;
   var pausedTime;
+  var pausedTimeInterval;
   var socket ;
   
   function activatePauseInterval (){
-    console.log(counter);
-    setInterval(pauseTimeClock, 1000);
+    pausedTimeInterval = setInterval(pauseTimeClock, 1000);
+  }
+  
+  function clearPauseInterval(){  
+    counter = 0;
+    pausedTime = 0;
+    
+    resetPauseTimer();
+    clearInterval (pausedTimeInterval);
   }
   
   function setSocket(sock){
@@ -19,21 +27,29 @@ function pause() {
     return pausedTime;
   }
   
-  function resetClock(){
-     clockUtil().resetClock(socket); 	  
+  function resetClockToZero(){
+     clockUtil.resetClock(socket); 	  
   }
   
   function pauseTimeClock() {
-    pausedTime = moment().hour(0).minute(0).second(counter++);
+    pausedTime = moment().hour(0).minute(0).second(counter ++);
     socket.emit("pauseTimeClock", { time: pausedTime.format('HH:mm:ss') });	
   }
   
+  function resetPauseTimer() {
+    socket.emit("pauseTimeClock", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
+
+  }
+    
+  
   return {
-    pauseTimeClock: pauseTimeClock,
-    setSocket : setSocket,
+    pauseTimeClock        : pauseTimeClock,
+    setSocket             : setSocket,
     activatePauseInterval : activatePauseInterval,
-	  resetClock : resetClock,
-    getPausedTime : getPausedTime
+    clearPauseInterval    : clearPauseInterval,
+	  resetClockToZero      : resetClockToZero,
+    resetPauseTimer       : resetPauseTimer,
+    getPausedTime         : getPausedTime
   }
   
 };
