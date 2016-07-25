@@ -20,6 +20,7 @@
     $('#pauseButton').on('click', function () {
         stopWatchClock.pausing();
     });
+    
 
     socket.on('pauseTimeClock', function (data) {
         stopWatchClock.setPausedTime(data.time);
@@ -31,6 +32,9 @@
          socket.emit('startTime', data);
     });
     
+     socket.on('invalidTimeAlert', function () {
+         $('#timeError').modal('show');
+    });
     function getUserTimeInput (){
        var userInputStartTime = $('.startTime').clockpicker().find('input');      
        return userInputStartTime;
@@ -40,11 +44,12 @@
    
         var timeStrArray = time[0].value.split(":");
         var inputHour = parseInt(timeStrArray[0]);
-        var inputMinute = parseInt(timeStrArray[1]);
+        var inputMinute = parseInt(timeStrArray[1]);       
         
         var date = new Date();
         date.setHours(inputHour);
         date.setMinutes(inputMinute);
+    
         return date;
     }
     
@@ -165,6 +170,13 @@
 
         this.pause = function () {
              $('#notActive').modal('show');
+        }
+        
+        this.stop = function (stopwatch) {
+             this.stopwatch = stopwatch;
+             this.stopwatch.changeState(this.stopwatch.getStopState());
+             socket.emit('stopTime');
+             console.log('stopping');
         }
     };
 
