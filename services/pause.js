@@ -2,10 +2,10 @@ var clockUtil = require('./util');
 
 function pause() {
   
-  var counter = 0;
-  var pausedTime;
-  var pausedTimeInterval;
-  var socket ;
+  var counter = 0,
+      pausedTime,
+      pausedTimeInterval,
+      socket ;
   
   function activatePauseInterval (){
     pausedTimeInterval = setInterval(pauseTimeClock, 1000);
@@ -33,7 +33,7 @@ function pause() {
   
   function pauseTimeClock() {
     pausedTime = moment().hour(0).minute(0).second(counter ++);
-    socket.emit("pauseTimeClock", { time: pausedTime.format('HH:mm:ss') });	
+     socket.emit("pauseTimeClock", { time: pausedTime.format('HH:mm:ss') });	
   }
   
   function resetPauseTimer() {

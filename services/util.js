@@ -1,12 +1,13 @@
 
 function util() {
     
-    var socketId = [];
+
    
     function resetClock(socket) {
         socket.broadcast.emit("countDown", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
         socket.broadcast.emit("startTime", { time: moment().hour(0).minute(0).format('HH:mm') });
-    }   
+    }
+   
     function disConnectSocket (socket){      
         if (socketId.length > 1) {
             socket.namespace.sockets[socketId[0].id].disconnect();
@@ -14,6 +15,7 @@ function util() {
             addSocketToArray(socket);
         }
     }
+    
     function getTimeRemaining(endtime) {
         var t = endtime - Date.parse(new Date());
         var seconds = Math.floor((t / 1000) % 60);

@@ -17,33 +17,29 @@ app.use(express.static(__dirname + "/public"))
 //Points to admin.html instead of the default index.html
 app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' }))
 
-var socket = io.listen(server);
+var socket = io.listen(server, {log: false});
 
-socket.configure(function () {
-  socket.set("transports", ["xhr-polling"])
-  socket.set("polling duration", 10)
-  socket.set("log level", 1)
-});
 
 
 socket.sockets.on("connection", function (socket) {
- 
+  
+  //initialize 
+  playFunc.setSocket(socket);
+  pauseFunc.setSocket(socket);
+  
+  console.log('in connection: ' + socket.id)
+  
   socket.on('startTime', function (timeValue) {
 
-    playFunc.setSocket(socket); 
     playFunc.setAsNewRequest();
-    
-    playFunc.inputTimeValidation();
     playFunc.updateClock(timeValue);
     playFunc.activateStartInterval();
-
+    
   });
 
   socket.on('pauseTime', function () {
     //stop timer 
     playFunc.clearStartTimeInterval();
-       
-    pauseFunc.setSocket(this);
     pauseFunc.pauseTimeClock();    
     pauseFunc.activatePauseInterval();
     pauseFunc.resetClockToZero();
@@ -60,9 +56,9 @@ socket.sockets.on("connection", function (socket) {
 
     //parse momentjs object to Date.valueOf object in milliseconds
     var restartTime = restartTimeVal.utc().valueOf();
-
-    socket.emit('restartClock', restartTime);
+    socket.broadcast.emit('restartClock', restartTime);
     
+    //reset pause timer  
     pauseFunc.clearPauseInterval();
 
   })
@@ -70,7 +66,7 @@ socket.sockets.on("connection", function (socket) {
   socket.on('stopTime', function () {
     
     playFunc.clearStartTimeInterval();
-    pauseFunc.resetClockToZero();
+    playFunc.resetClockToZero();
     pauseFunc.clearPauseInterval();
 
   });
