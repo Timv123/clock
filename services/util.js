@@ -1,11 +1,9 @@
 
 function util() {
     
-
-   
     function resetClock(socket) {
-        socket.broadcast.emit("countDown", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
-        socket.broadcast.emit("startTime", { time: moment().hour(0).minute(0).format('HH:mm') });
+        socket.sockets.emit("countDown", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
+        socket.sockets.emit("startTime", { time: moment().hour(0).minute(0).format('HH:mm') });
     }
    
     function disConnectSocket (socket){      

@@ -8,7 +8,7 @@
     <script>
     $(function() {
 
-      var socket = io.connect('http://localhost')
+      var socket = io.connect('http://localhost:7000')
       
       socket.on('currentTime', function (data) {
         console.log(data)
@@ -26,6 +26,10 @@
         console.log(data)
         $('.countdown').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
+      
+       socket.on('pauseTimeClock', function (data) {
+        $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+    });
 
 
     })

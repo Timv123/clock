@@ -40,6 +40,7 @@ function playFuntion() {
         if (oldSocket !== socket.id) {
             clearStartTimeInterval();
         }
+        
         oldSocket = socket.id;
     }
 
@@ -52,16 +53,17 @@ function playFuntion() {
         var t = clockUtil.getTimeRemaining(inputTimeValue);
 
         //reset when time runs out
-        if (t.total <= 0) {
+        if (t.total < 1) {           
+            clearStartTimeInterval();
             clockUtil.resetClock(socket);
         }
         
         //format time for display 
         countDownTime = moment().hour(t.hours).minute(t.minutes).second(t.seconds--);
 
-        socket.broadcast.emit("currentTime", { time: moment().format('HH:mm:ss') });
-        socket.broadcast.emit("countDown", { time: countDownTime.format('HH:mm:ss') });
-        socket.broadcast.emit("startTime", { time: moment(inputTimeValue).format('HH:mm') });
+        socket.sockets.emit("currentTime", { time: moment().format('HH:mm:ss') });
+        socket.sockets.emit("countDown", { time: countDownTime.format('HH:mm:ss') });
+        socket.sockets.emit("startTime", { time: moment(inputTimeValue).format('HH:mm') });
 
     }
 
