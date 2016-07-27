@@ -14,8 +14,6 @@ function pause() {
   function clearPauseInterval(){  
     counter = 0;
     pausedTime = 0;
-    
-    resetPauseTimer();
     clearInterval (pausedTimeInterval);
   }
   

@@ -31,6 +31,7 @@ outterSocket.sockets.on("connection", function (socket) {
   
   //clear any previous setting each for new connect
   playFunc.clearStartTimeInterval();
+  pauseFunc.clearPauseInterval();
   
   socket.on('startTime', function (timeValue) {
    
@@ -72,6 +73,7 @@ outterSocket.sockets.on("connection", function (socket) {
     playFunc.clearStartTimeInterval();
     playFunc.resetClockToZero();
     pauseFunc.clearPauseInterval();
+    pauseFunc.resetPauseTimer();
 
   });
 
