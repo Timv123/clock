@@ -40,6 +40,7 @@ function playFuntion() {
         if (oldSocket !== socket.id) {
             clearStartTimeInterval();
         }
+        
         oldSocket = socket.id;
     }
 
@@ -52,7 +53,8 @@ function playFuntion() {
         var t = clockUtil.getTimeRemaining(inputTimeValue);
 
         //reset when time runs out
-        if (t.total <= 0) {
+        if (t.total < 1) {           
+            clearStartTimeInterval();
             clockUtil.resetClock(socket);
         }
         

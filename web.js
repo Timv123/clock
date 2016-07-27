@@ -9,7 +9,7 @@ var pauseFunc = require('./services/pause');
 var playFunc = require('./services/play');
 
 
-server.listen(7000);
+server.listen(80);
 
 //Use to serve up static files within public directory
 app.use(express.static(__dirname + "/public"))
@@ -20,15 +20,16 @@ app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' })
 var outterSocket = io.listen(server, {log: false});
 
 
-
 outterSocket.sockets.on("connection", function (socket) {
   
   //initialize 
-  playFunc.setSocket(outterSocket);
-  pauseFunc.setSocket(outterSocket);
-
+   playFunc.setSocket(outterSocket);
+   pauseFunc.setSocket(outterSocket);
+  
+  console.log('in connection: ' + socket.id)
+  
   socket.on('startTime', function (timeValue) {
-
+   
     playFunc.setAsNewRequest(socket);
     playFunc.updateClock(timeValue);
     playFunc.activateStartInterval();
@@ -36,7 +37,9 @@ outterSocket.sockets.on("connection", function (socket) {
   });
 
   socket.on('pauseTime', function () {
+    
     //stop timer 
+    
     playFunc.clearStartTimeInterval();
     pauseFunc.pauseTimeClock();    
     pauseFunc.activatePauseInterval();

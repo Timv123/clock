@@ -3,11 +3,15 @@
 
 <head>
   <title>socket.io clock</title>
+  <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
+  <script type="text/javascript" src="/socket.io/socket.io.js"></script>
   <!-- Bootstrap stylesheet -->
   <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
   <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
   <!-- ClockPicker Stylesheet -->
   <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
+ 
+  
 </head>
 
 <body>
@@ -33,7 +37,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Clock is not active</h4>
+          <h4 class="modal-title">Error!!</h4>
         </div>
         <div class="modal-body">
           <p>Press "Play" to start the clock!</p>
@@ -90,7 +94,7 @@
             <td>
               <h1 class="startTimeClock" id="clock"></h1></td>
           </tr>
-          
+
           <tr class="danger">
             <td>
               <h3>Countdown </h3></td>
@@ -109,49 +113,52 @@
     </div>
     <div class="col-md-6">
       <tr class="info">
-            <td>
-              <!-- Start Time -->
-              <div>
-                <h3>Start Time</h3></div>
-              <div class="input-group startTime">
-                <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
-                <span class="input-group-addon">
+        <td>
+          <!-- Start Time -->
+          <div>
+            <h3>Start Time</h3></div>
+          <div class="input-group startTime">
+            <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
+            <span class="input-group-addon">
               <span class="glyphicon glyphicon-time"></span>
-                </span>
-              </div>
-            </td>
-          </tr>
+            </span>
+          </div>
+        </td>
+      </tr>
 
-          <tr>
-            <td>
-              <!-- Play - Pause - Stop -->
-              <div>
-                <button id="playButton" type="button" class="btn btn-lg">
+      <tr>
+        <td>
+          <!-- Play - Pause - Stop -->
+          <div>
+            <button id="playButton" type="button" class="btn btn-lg">
                   <span class="glyphicon glyphicon-play"></span>
               </button>
-                <button id="pauseButton" type="button" class="btn btn-lg">
+            <button id="pauseButton" type="button" class="btn btn-lg">
                   <span class="glyphicon glyphicon-pause"></span>
               </button>
-                <button id="stopButton" type="button" class="btn btn-lg">
+            <button id="stopButton" type="button" class="btn btn-lg">
                   <span class="glyphicon glyphicon-stop"></span>
               </button>
-              </div>
-            </td>
-          </tr>  
-      </tr>    
+          </div>
+        </td>
+      </tr>
+      </tr>
     </div>
-
   </div>
 
+
 </body>
-<script type="text/javascript" src="assets/js/jquery.min.js"></script>
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+
+
+
 
 <!-- jQuery and Bootstrap scripts -->
-<script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
 <!-- ClockPicker script -->
 <script type="text/javascript" src="dist/bootstrap-clockpicker.min.js"></script>
 <script type="text/javascript" src="admin.js"></script>
+
+
 
 
 </html>

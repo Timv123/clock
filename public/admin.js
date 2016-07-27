@@ -2,8 +2,11 @@
 
     //establish websocket connection
     var socket = io.connect('http://localhost');
-    var stopWatchClock = new stopwatch();
-    console.log(socket);
+    var stopWatchClock = new stopwatch();    
+    
+    /************************************************************************************************
+     ***  jQuery event listeners *******************************************************************
+     ************************************************************************************************/
 
     $('.startTime').clockpicker({
         donetext: 'Done'
@@ -23,8 +26,9 @@
 
 
     /************************************************************************************************
-     ***  socket listener events  *******************************************************************
+     ***  socket event listeners  *******************************************************************
      ************************************************************************************************/
+     
     socket.on('pauseTimeClock', function (data) {
         stopWatchClock.setPausedTime(data.time);
         $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
@@ -38,29 +42,27 @@
         console.log('in valid time check');
         $('#timeError').modal('show');
     });
-    
-    socket.on('currentTime', function (data) {
-        console.log(data)
-        $('.currentTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
-    });
 
 
     socket.on('startTime', function (data) {
-        console.log(data)
         $('.startTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
     });
 
 
     socket.on('countDown', function (data) {
-        console.log(data)
         $('.countdownClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
     });
-
-
+    
+     socket.on('currentTime', function (data) {
+        $('.currentTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+      });
+      
+ 
 
     /************************************************************************************************
      ***  Clock Play, Pause, Stop states  ***********************************************************
      ************************************************************************************************/
+     
     function getUserTimeInput() {
         var userInputStartTime = $('.startTime').clockpicker().find('input');
         return userInputStartTime;

@@ -10,9 +10,15 @@
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script>
     $(function() {
-
       var socket = io.connect('http://localhost')
      
+      
+      socket.on('currentTime', function (data) {
+        console.log(data)
+        $('.currentTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+      });
+      
+      
       socket.on('startTime', function (data) {
         console.log(data)
         $('.startTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
@@ -23,6 +29,10 @@
         console.log(data)
         $('.countdown').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
+      
+       socket.on('pauseTimeClock', function (data) {
+        $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+    });
 
 
     })
