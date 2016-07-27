@@ -3,19 +3,16 @@
 <head>
   <title>socket.io clock</title>
   <link rel="stylesheet" media="screen" href="index.css">
+  <!-- Bootstrap stylesheet -->
+  <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+  <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script>
     $(function() {
 
       var socket = io.connect('http://localhost')
-      
-      socket.on('currentTime', function (data) {
-        console.log(data)
-        $('.currentTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
-      });
-      
-      
+     
       socket.on('startTime', function (data) {
         console.log(data)
         $('.startTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
@@ -33,15 +30,15 @@
   
 </head>
 <body>
-  <h3>Current Time</h3>
-  <h1 class= "currentTime" id="clock"></h1>
-  
-  <h3>Start Time</h3>
-  <h1 class = "startTime" id="clock"></h1>
 
-  <h3>Countdown Time</h3>
-  <h1 class= "countdown" id="clock"></h1>
+
   
+  <table class="table table-condensed">
+    <tr class="active">
+      <td><h3>Start Time</h3><h1 class="startTime" id="clock"></td>
+      <td><h3>Countdown</h3><h1 class="countdown" id="clock"></h1></td>
+    </tr>   
+  </table>
 
 </body>
 </html>

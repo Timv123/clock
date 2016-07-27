@@ -11,17 +11,19 @@ h1 {
 p {
     color: #666;
 }
-
+.row {
+    text-align: center
+    }
 #clock {
     display: block;
-    margin: 50px auto;
+    margin: 5px auto;
     width: 800px;
     text-align: center;
 }
 
 #clock span {
     position: relative;
-    font-size: 64px;
+    font-size: 30px;
     display: inline-block;
     background: #222;
     margin-right: 3px;

@@ -5,34 +5,12 @@
   <title>socket.io clock</title>
   <!-- Bootstrap stylesheet -->
   <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+  <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
   <!-- ClockPicker Stylesheet -->
   <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
-  <link rel="stylesheet" media="screen" href="index.css">
 </head>
 
 <body>
-  <!-- Start Time -->
-  <div>
-    <h3>Start Time</h3></div>
-  <div class="input-group startTime">
-    <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
-    <span class="input-group-addon">
-        <span class="glyphicon glyphicon-time"></span>
-    </span>
-  </div>
-
-  <!-- Play - Pause - Stop -->
-  <div>
-    <button id="playButton" type="button" class="btn btn-lg">
-        <span class="glyphicon glyphicon-play"></span>
-    </button>
-    <button id="pauseButton" type="button" class="btn btn-lg">
-        <span class="glyphicon glyphicon-pause"></span>
-    </button>
-    <button id="stopButton" type="button" class="btn btn-lg">
-        <span class="glyphicon glyphicon-stop"></span>
-    </button>
-  </div>
 
   <!-- Modal -->
   <div class="modal fade" id="emptyField" role="dialog">
@@ -48,7 +26,7 @@
       </div>
     </div>
   </div>
-  
+
   <!-- Modal Pause-->
   <div class="modal fade" id="notActive" role="dialog">
     <div class="modal-dialog modal-sm">
@@ -63,8 +41,8 @@
       </div>
     </div>
   </div>
-  
-   <!-- Already Playing modal-->
+
+  <!-- Already Playing modal-->
   <div class="modal fade" id="inPlay" role="dialog">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -78,9 +56,9 @@
       </div>
     </div>
   </div>
-  
-  
-   <!-- Time Error Playing modal-->
+
+
+  <!-- Time Error Playing modal-->
   <div class="modal fade" id="timeError" role="dialog">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -95,17 +73,75 @@
     </div>
   </div>
 
-<h3>Current Time</h3>
-<h1 class="currentTimeClock" id="clock"></h1>
-<h3>Start Time</h3>
-<h1 class="startTimeClock" id="clock"></h1>
-<h3>Countdown Time</h3>
-<h1 class="countdownClock" id="clock"></h1>
 
-<!--pausedTime-->
-<h3>Pause Time</h3>
-<h1 class="pauseTime" id="clock"></h1>
+  <div class="row">
+    <div class="col-md-6">
+      <table class="table">
+        <tbody>
+          <tr class="success">
+            <td>
+              <h3>Current Time</h3></td>
+            <td>
+              <h1 class="currentTimeClock" id="clock"></h1></td>
+          </tr>
+          <tr class="success">
+            <td>
+              <h3>Start Time</h3></td>
+            <td>
+              <h1 class="startTimeClock" id="clock"></h1></td>
+          </tr>
+          
+          <tr class="danger">
+            <td>
+              <h3>Countdown </h3></td>
+            <td>
+              <h1 class="countdownClock" id="clock"></h1></td>
+          </tr>
 
+          <tr class="success">
+            <td>
+              <h3>Paused Time</h3></td>
+            <td>
+              <h1 class="pauseTime" id="clock"></h1></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-md-6">
+      <tr class="info">
+            <td>
+              <!-- Start Time -->
+              <div>
+                <h3>Start Time</h3></div>
+              <div class="input-group startTime">
+                <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
+                <span class="input-group-addon">
+              <span class="glyphicon glyphicon-time"></span>
+                </span>
+              </div>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <!-- Play - Pause - Stop -->
+              <div>
+                <button id="playButton" type="button" class="btn btn-lg">
+                  <span class="glyphicon glyphicon-play"></span>
+              </button>
+                <button id="pauseButton" type="button" class="btn btn-lg">
+                  <span class="glyphicon glyphicon-pause"></span>
+              </button>
+                <button id="stopButton" type="button" class="btn btn-lg">
+                  <span class="glyphicon glyphicon-stop"></span>
+              </button>
+              </div>
+            </td>
+          </tr>  
+      </tr>    
+    </div>
+
+  </div>
 
 </body>
 <script type="text/javascript" src="assets/js/jquery.min.js"></script>

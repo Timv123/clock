@@ -26,9 +26,7 @@ outterSocket.sockets.on("connection", function (socket) {
   //initialize 
   playFunc.setSocket(outterSocket);
   pauseFunc.setSocket(outterSocket);
-  
-  console.log('in connection: ' + socket.id)
-  
+
   socket.on('startTime', function (timeValue) {
 
     playFunc.setAsNewRequest(socket);
