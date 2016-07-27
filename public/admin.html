@@ -10,8 +10,8 @@
   <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
   <!-- ClockPicker Stylesheet -->
   <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
- 
-  
+
+
 </head>
 
 <body>
@@ -77,18 +77,22 @@
     </div>
   </div>
 
-
+  <!-- Show currenttime, paused time , set time, ect..-->
+ <nav class="navbar navbar-default"><div class="container-fluid"></div></nav>
   <div class="row">
+    <div class="col-md-3"></div>
     <div class="col-md-6">
-      <table class="table">
+      <table class="table table-hover">
         <tbody>
-          <tr class="success">
+          <tr></tr>
+          <tr class="info">
             <td>
-              <h3>Current Time</h3></td>
+              <h3>Current Time</h3>
+            </td>
             <td>
               <h1 class="currentTimeClock" id="clock"></h1></td>
           </tr>
-          <tr class="success">
+          <tr class="info">
             <td>
               <h3>Start Time</h3></td>
             <td>
@@ -102,55 +106,47 @@
               <h1 class="countdownClock" id="clock"></h1></td>
           </tr>
 
-          <tr class="success">
+          <tr class="info">
             <td>
               <h3>Paused Time</h3></td>
             <td>
               <h1 class="pauseTime" id="clock"></h1></td>
           </tr>
+          <!-- input Time -->
+          <tr class="active">
+            <td>
+               <!-- Play - Pause - Stop -->
+              <div>
+                <button id="playButton" type="button" class="btn btn-lg">
+                      <span class="glyphicon glyphicon-play"></span>
+                  </button>
+                <button id="pauseButton" type="button" class="btn btn-lg">
+                      <span class="glyphicon glyphicon-pause"></span>
+                  </button>
+                <button id="stopButton" type="button" class="btn btn-lg">
+                      <span class="glyphicon glyphicon-stop"></span>
+                  </button>
+              </div>
+            </td>
+              
+            <td>
+              <!-- Start Time -->
+              
+                <div class="input-group startTime">
+                  <input type="text" class="form-control input-lg" id="single-input" value="" placeholder="Now">
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                
+               </div>
+
+             
+            </td>
+          </tr>
         </tbody>
       </table>
     </div>
-    <div class="col-md-6">
-      <tr class="info">
-        <td>
-          <!-- Start Time -->
-          <div>
-            <h3>Start Time</h3></div>
-          <div class="input-group startTime">
-            <input type="text" class="form-control" id="single-input" value="" placeholder="Now">
-            <span class="input-group-addon">
-              <span class="glyphicon glyphicon-time"></span>
-            </span>
-          </div>
-        </td>
-      </tr>
-
-      <tr>
-        <td>
-          <!-- Play - Pause - Stop -->
-          <div>
-            <button id="playButton" type="button" class="btn btn-lg">
-                  <span class="glyphicon glyphicon-play"></span>
-              </button>
-            <button id="pauseButton" type="button" class="btn btn-lg">
-                  <span class="glyphicon glyphicon-pause"></span>
-              </button>
-            <button id="stopButton" type="button" class="btn btn-lg">
-                  <span class="glyphicon glyphicon-stop"></span>
-              </button>
-          </div>
-        </td>
-      </tr>
-      </tr>
-    </div>
+    <div class="col-md-3"></div>
   </div>
-
-
 </body>
-
-
-
 
 <!-- jQuery and Bootstrap scripts -->
 <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>

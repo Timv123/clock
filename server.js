@@ -8,8 +8,11 @@ var moment = require("moment");
 var pauseFunc = require('./services/pause');
 var playFunc = require('./services/play');
 
-
-server.listen(80);
+// Server 
+var port = 80;
+server.listen(port, function () {
+  console.log('Server started, listening to port ' + port);
+});
 
 //Use to serve up static files within public directory
 app.use(express.static(__dirname + "/public"))
@@ -23,10 +26,8 @@ var outterSocket = io.listen(server, {log: false});
 outterSocket.sockets.on("connection", function (socket) {
   
   //initialize 
-   playFunc.setSocket(outterSocket);
-   pauseFunc.setSocket(outterSocket);
-  
-  console.log('in connection: ' + socket.id)
+  playFunc.setSocket(outterSocket);
+  pauseFunc.setSocket(outterSocket);  
   
   socket.on('startTime', function (timeValue) {
    
@@ -38,8 +39,7 @@ outterSocket.sockets.on("connection", function (socket) {
 
   socket.on('pauseTime', function () {
     
-    //stop timer 
-    
+    //stop timer    
     playFunc.clearStartTimeInterval();
     pauseFunc.pauseTimeClock();    
     pauseFunc.activatePauseInterval();
@@ -58,6 +58,7 @@ outterSocket.sockets.on("connection", function (socket) {
     //parse momentjs object to Date.valueOf object in milliseconds
     var restartTime = restartTimeVal.utc().valueOf();
     socket.emit('restartClock', restartTime);
+    
     //reset pause timer  
     pauseFunc.clearPauseInterval();
 
