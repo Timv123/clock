@@ -38,8 +38,25 @@
         console.log('in valid time check');
         $('#timeError').modal('show');
     });
-
     
+    socket.on('currentTime', function (data) {
+        console.log(data)
+        $('.currentTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+    });
+
+
+    socket.on('startTime', function (data) {
+        console.log(data)
+        $('.startTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+    });
+
+
+    socket.on('countDown', function (data) {
+        console.log(data)
+        $('.countdownClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
+    });
+
+
 
     /************************************************************************************************
      ***  Clock Play, Pause, Stop states  ***********************************************************

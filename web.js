@@ -17,21 +17,21 @@ app.use(express.static(__dirname + "/public"))
 //Points to admin.html instead of the default index.html
 app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' }))
 
-var socket = io.listen(server, {log: false});
+var outterSocket = io.listen(server, {log: false});
 
 
 
-socket.sockets.on("connection", function (socket) {
+outterSocket.sockets.on("connection", function (socket) {
   
   //initialize 
-  playFunc.setSocket(socket);
-  pauseFunc.setSocket(socket);
+  playFunc.setSocket(outterSocket);
+  pauseFunc.setSocket(outterSocket);
   
   console.log('in connection: ' + socket.id)
   
   socket.on('startTime', function (timeValue) {
 
-    playFunc.setAsNewRequest();
+    playFunc.setAsNewRequest(socket);
     playFunc.updateClock(timeValue);
     playFunc.activateStartInterval();
     
@@ -56,8 +56,7 @@ socket.sockets.on("connection", function (socket) {
 
     //parse momentjs object to Date.valueOf object in milliseconds
     var restartTime = restartTimeVal.utc().valueOf();
-    socket.broadcast.emit('restartClock', restartTime);
-    
+    socket.emit('restartClock', restartTime);
     //reset pause timer  
     pauseFunc.clearPauseInterval();
 

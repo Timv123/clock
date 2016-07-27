@@ -33,11 +33,11 @@ function pause() {
   
   function pauseTimeClock() {
     pausedTime = moment().hour(0).minute(0).second(counter ++);
-     socket.emit("pauseTimeClock", { time: pausedTime.format('HH:mm:ss') });	
+     socket.sockets.emit("pauseTimeClock", { time: pausedTime.format('HH:mm:ss') });	
   }
   
   function resetPauseTimer() {
-    socket.emit("pauseTimeClock", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
+    socket.sockets.emit("pauseTimeClock", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
 
   }
     
