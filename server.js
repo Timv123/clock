@@ -29,6 +29,9 @@ outterSocket.sockets.on("connection", function (socket) {
   playFunc.setSocket(outterSocket);
   pauseFunc.setSocket(outterSocket);  
   
+  //clear any previous setting each for new connect
+  playFunc.clearStartTimeInterval();
+  
   socket.on('startTime', function (timeValue) {
    
     playFunc.setAsNewRequest(socket);
