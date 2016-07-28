@@ -22,12 +22,15 @@ function Stop() {
             this.outterSocket.sockets.emit('invalidTimeAlert');
         } 
         else {  
+            
+           //when done state change 
+           this.stopwatch.changeState(this.stopwatch.getPlayState()); 
                       
            // playFunc.setAsNewRequest(socket);
             playFunc.setSocket(this.outterSocket);
             playFunc.updateClock(this.startTime);
             playFunc.activateStartInterval();    
-                     
+                        
         }
     }
 

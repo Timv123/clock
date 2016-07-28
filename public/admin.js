@@ -7,7 +7,8 @@
      ***  jQuery event listeners *******************************************************************
      ************************************************************************************************/
     var inputTime = parseTimeInputToDateObj(getUserTimeInput());
-
+    var pausedTime;
+    
     $('.startTime').clockpicker({
         donetext: 'Done'
     });
@@ -31,12 +32,12 @@
      ************************************************************************************************/
      
     socket.on('pauseTimeClock', function (data) {
-       // stopWatchClock.setPausedTime(data.time);
+        pausedTime = data;
         $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
     });
 
-    socket.on('restartClock', function (data) {
-        socket.emit('startTime', data);
+    socket.on('restartClock', function () {
+        socket.emit('play', pausedTime);
     });
 
     socket.on('invalidTimeAlert', function () {

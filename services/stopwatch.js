@@ -1,11 +1,12 @@
-var Play = require('../states/playState');
-var Stop = require('../states/stopState');
-var Pause = require('../states/pauseState');
+var PlayState = require('../states/playState');
+var StopState = require('../states/stopState');
+var PauseState = require('../states/pauseState');
+
 var clockUtil = require('./util');
 
 
 function stopwatch() {
-        this.currentState = new Stop(this);
+        this.currentState = new StopState(this);
         this.pausedTime;
         this.startTime;
         this.socket;
@@ -20,21 +21,21 @@ function stopwatch() {
 
         this.playing = function(time) {
             this.setStartTime(time);
-            this.currentState.play(this);
-            
-             //when done state change 
-            this.changeState(this.getPlayState());   
+            this.currentState.play(this);              
         }
 
         this.pausing = function() {
             this.currentState.pause(this);
-            this.changeState(this.getPauseState());
-
         }
 
         this.setPausedTime = function(pauseTime) {
+            console.log('set pause time');
             this.pausedTime = pauseTime
         }
+        this.getPausedTime = function() {
+            return this.pausedTime;
+        }
+
 
         this.setStartTime = function(startTime) {
             this.startTime = startTime
@@ -45,28 +46,28 @@ function stopwatch() {
         }
 
         this.getPlayState = function() {
-            return new Play(this);
+            return new PlayState(this);
         }
 
         this.getStopState = function() {
-            return new Stop(this);
+            return new StopState(this);
         }
 
         this.getPauseState = function() {
-            return new Pause(this);
+            return new PauseState(this);
         }
         
         this.getClockUtil = function (){
             return clockUtil;
         }
+        
         this.setSocket = function (sock){
             this.socket = sock;
         }
+        
         this.getSocket = function (){
             return this.socket;
-        }
-        
-    
+        }         
     };
     
     module.exports = stopwatch;

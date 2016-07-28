@@ -5,11 +5,16 @@ var playFunc = require('../services/play');
 function Pause() {
 
     this.play = function (stopwatch) {
-        this.stopwatch = stopwatch;  
+        this.stopwatch = stopwatch;      
+        this.outterSocker = this.stopwatch.getSocket();
+        
+        this.outterSocker.sockets.emit('restartClock');
     }
+    
     this.pause = function () {
-        $('#notActive').modal('show');
+       // $('#notActive').modal('show');
     }
+    
     this.stop = function (stopwatch) {
         this.stopwatch = stopwatch;
         this.stopwatch.changeState(this.stopwatch.getStopState());

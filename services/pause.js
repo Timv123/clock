@@ -38,7 +38,6 @@ function pause() {
     socket.sockets.emit("pauseTimeClock", { time: moment().hour(0).minute(0).second(0).format('HH:mm:ss') });
   }
     
-  
   return {
     pauseTimeClock        : pauseTimeClock,
     setSocket             : setSocket,
