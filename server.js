@@ -7,6 +7,7 @@ var moment = require("moment");
 
 var pauseFunc = require('./services/pause');
 var playFunc = require('./services/play');
+var Stopwatch = require('./services/stopwatch');
 
 // Server 
 var port = 80;
@@ -22,61 +23,31 @@ app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' })
 
 var outterSocket = io.listen(server, {log: false});
 
+var stopClockTimer = new Stopwatch();
 
 outterSocket.sockets.on("connection", function (socket) {
   
-  //initialize 
-  playFunc.setSocket(outterSocket);
-  pauseFunc.setSocket(outterSocket);  
+  //init
+  stopClockTimer.setSocket(outterSocket);
   
-  //clear any previous setting each for new connect
-  playFunc.clearStartTimeInterval();
-  pauseFunc.clearPauseInterval();
-  
-  socket.on('startTime', function (timeValue) {
+  socket.on('play', function (timeValue) {
    
-    playFunc.setAsNewRequest(socket);
-    playFunc.updateClock(timeValue);
-    playFunc.activateStartInterval();
+    console.log('playing ' + timeValue);
+    stopClockTimer.playing(timeValue);
     
   });
 
-  socket.on('pauseTime', function () {
+  socket.on('stop', function () {
     
-    //stop timer    
-    playFunc.clearStartTimeInterval();
-    pauseFunc.pauseTimeClock();    
-    pauseFunc.activatePauseInterval();
-    pauseFunc.resetClockToZero();
+
     
   })
 
-  socket.on('restartTime', function () {
-    var inputTimeValue = playFunc.getInputStartTime();
-    var pausedTime = pauseFunc.getPausedTime();
-    var restartTimeVal = moment(inputTimeValue);   
-    
-    restartTimeVal.add(pausedTime.hour(), 'hours');
-    restartTimeVal.add(pausedTime.minute(), 'minutes');
+  socket.on('pause', function () {
 
-    //parse momentjs object to Date.valueOf object in milliseconds
-    var restartTime = restartTimeVal.utc().valueOf();
-    socket.emit('restartClock', restartTime);
-    
-    //reset pause timer  
-    pauseFunc.clearPauseInterval();
 
   })
-
-  socket.on('stopTime', function () {
-    
-    playFunc.clearStartTimeInterval();
-    playFunc.resetClockToZero();
-    pauseFunc.clearPauseInterval();
-    pauseFunc.resetPauseTimer();
-
-  });
-
+  
 });
 
 

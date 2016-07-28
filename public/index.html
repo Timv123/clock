@@ -9,21 +9,19 @@
   <script type="text/javascript" src="assets/js/jquery.min.js"></script>
   <script type="text/javascript" src="/socket.io/socket.io.js"></script>
     <script>
+      
     $(function() {
       var socket = io.connect('http://localhost')
-     
-      
+         
       socket.on('currentTime', function (data) {
         console.log(data)
         $('.currentTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
-      
-      
+       
       socket.on('startTime', function (data) {
         console.log(data)
         $('.startTime').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
-
 
       socket.on('countDown', function (data) {
         console.log(data)
@@ -42,13 +40,13 @@
 <body>
 
 
+     <table class="table">
+      <tr class="active">
+        <td ><h3>Start Time</h3><h1 class="startTime" id="clock"></td>
+        <td ><h3>Countdown</h3><h1 class="countdown" id="clock"></h1></td>
+      </tr>   
+    </table>
   
-  <table class="table table-condensed">
-    <tr class="active">
-      <td><h3>Start Time</h3><h1 class="startTime" id="clock"></td>
-      <td><h3>Countdown</h3><h1 class="countdown" id="clock"></h1></td>
-    </tr>   
-  </table>
 
 </body>
 </html>

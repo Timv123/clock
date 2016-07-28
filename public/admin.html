@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
   <title>socket.io clock</title>
   <script type="text/javascript" src="/assets/js/jquery.min.js"></script>
@@ -10,26 +9,9 @@
   <script type="text/javascript" src="assets/js/bootstrap.min.js"></script>
   <!-- ClockPicker Stylesheet -->
   <link rel="stylesheet" type="text/css" href="dist/bootstrap-clockpicker.min.css">
-
-
 </head>
 
 <body>
-
-  <!-- Modal -->
-  <div class="modal fade" id="emptyField" role="dialog">
-    <div class="modal-dialog modal-sm">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">&times;</button>
-          <h4 class="modal-title">Empty field!!</h4>
-        </div>
-        <div class="modal-body">
-          <p>Missing field input, select a time before pressing play.</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal Pause-->
   <div class="modal fade" id="notActive" role="dialog">
@@ -40,7 +22,7 @@
           <h4 class="modal-title">Error!!</h4>
         </div>
         <div class="modal-body">
-          <p>Press "Play" to start the clock!</p>
+          <p>Press "Play" to start the timer!</p>
         </div>
       </div>
     </div>
@@ -128,18 +110,13 @@
                       <span class="glyphicon glyphicon-stop"></span>
                   </button>
               </div>
-            </td>
-              
+            </td>              
             <td>
-              <!-- Start Time -->
-              
+              <!-- Start Time -->           
                 <div class="input-group startTime">
                   <input type="text" class="form-control input-lg" id="single-input" value="" placeholder="Now">
-                  <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
-                
-               </div>
-
-             
+                  <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>               
+               </div>          
             </td>
           </tr>
         </tbody>

@@ -14,6 +14,16 @@ function util() {
         }
     }
     
+    function isTimeValid(time) {
+        this.time = new Date(time).getTime();      
+        this.currentTime = new Date().getTime();
+        
+        if (this.time > this.currentTime) {
+            return true;
+        } else return false;
+    }
+
+    
     function getTimeRemaining(endtime) {
         var t = endtime - Date.parse(new Date());
         var seconds = Math.floor((t / 1000) % 60);
@@ -40,10 +50,12 @@ function util() {
             'seconds': seconds
         }
     }
-     
+    
     return {
         resetClock : resetClock,
-        getTimeRemaining : getTimeRemaining    }
+        getTimeRemaining : getTimeRemaining,
+        isTimeValid : isTimeValid
+    }
 
 }
 
