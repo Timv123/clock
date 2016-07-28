@@ -1,8 +1,11 @@
 var clockUtil = require('../services/util');
+var pauseFunc = require('../services/pause');
+var playFunc = require('../services/play');
+
 
 function Stop() {
     
-    this.socket;
+    this.outterSocket;
     
     this.stop = function () {
        // $('#notActive').modal('show');
@@ -13,14 +16,18 @@ function Stop() {
         this.stopwatch = stopwatch;
         this.startTime = this.stopwatch.getStartTime();
         this.isTimeValid = clockUtil.isTimeValid(this.startTime);
-        this.socket = this.stopwatch.getSocket();
+        this.outterSocket = this.stopwatch.getSocket();
         
         if (!this.isTimeValid) {
-            this.socket.sockets.emit('invalidTimeAlert');
+            this.outterSocket.sockets.emit('invalidTimeAlert');
         } 
         else {  
-                
-            this.stopwatch.changeState(this.stopwatch.getPlayState());           
+                      
+           // playFunc.setAsNewRequest(socket);
+            playFunc.setSocket(this.outterSocket);
+            playFunc.updateClock(this.startTime);
+            playFunc.activateStartInterval();    
+                     
         }
     }
 

@@ -1,6 +1,6 @@
-var Play = require('../resources/playState');
-var Stop = require('../resources/stopState');
-var Pause = require('../resources/pauseState');
+var Play = require('../states/playState');
+var Stop = require('../states/stopState');
+var Pause = require('../states/pauseState');
 var clockUtil = require('./util');
 
 
@@ -21,10 +21,15 @@ function stopwatch() {
         this.playing = function(time) {
             this.setStartTime(time);
             this.currentState.play(this);
+            
+             //when done state change 
+            this.changeState(this.getPlayState());   
         }
 
         this.pausing = function() {
             this.currentState.pause(this);
+            this.changeState(this.getPauseState());
+
         }
 
         this.setPausedTime = function(pauseTime) {
@@ -60,6 +65,8 @@ function stopwatch() {
         this.getSocket = function (){
             return this.socket;
         }
+        
+    
     };
     
     module.exports = stopwatch;

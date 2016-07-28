@@ -22,10 +22,10 @@ function util() {
             return true;
         } else return false;
     }
-
-    
+   
     function getTimeRemaining(endtime) {
-        var t = endtime - Date.parse(new Date());
+     
+        var t = Date.parse(endtime) - Date.parse(new Date());
         var seconds = Math.floor((t / 1000) % 60);
         var minutes = Math.floor((t / 1000 / 60) % 60);
         var hours = Math.floor((t / (1000 * 60 * 60)) % 24);
@@ -41,7 +41,6 @@ function util() {
         if (seconds.toString().length < 2) {
             seconds = "0" + seconds;
         }
-
         return {
             'total': t,
             'days': days,

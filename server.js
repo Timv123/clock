@@ -21,33 +21,27 @@ app.use(express.static(__dirname + "/public"))
 //Points to admin.html instead of the default index.html
 app.use('/admin', express.static(__dirname + "/public", { index: 'admin.html' }))
 
-var outterSocket = io.listen(server, {log: false});
+var outterSocket = io.listen(server, { log: false });
 
 var stopClockTimer = new Stopwatch();
 
 outterSocket.sockets.on("connection", function (socket) {
-  
+
   //init
   stopClockTimer.setSocket(outterSocket);
-  
+
   socket.on('play', function (timeValue) {
-   
-    console.log('playing ' + timeValue);
     stopClockTimer.playing(timeValue);
-    
   });
 
-  socket.on('stop', function () {
-    
-
-    
+  socket.on('stop', function (timeValue) {
+    stopClockTimer.stopping(timeValue);
   })
 
-  socket.on('pause', function () {
-
-
+  socket.on('pause', function (timeValue) {
+    stopClockTimer.pausing(timeValue);
   })
-  
+
 });
 
 

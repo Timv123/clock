@@ -51,7 +51,7 @@ function playFuntion() {
     function updateClock(timeValue) {
         inputTimeValue = timeValue;
         var t = clockUtil.getTimeRemaining(inputTimeValue);
-
+        
         //reset when time runs out
         if (t.total < 1) {           
             clearStartTimeInterval();
@@ -60,7 +60,6 @@ function playFuntion() {
         
         //format time for display 
         countDownTime = moment().hour(t.hours).minute(t.minutes).second(t.seconds--);
-
         socket.sockets.emit("currentTime", { time: moment().format('HH:mm:ss') });
         socket.sockets.emit("countDown", { time: countDownTime.format('HH:mm:ss') });
         socket.sockets.emit("startTime", { time: moment(inputTimeValue).format('HH:mm') });

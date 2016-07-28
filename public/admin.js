@@ -6,23 +6,23 @@
     /************************************************************************************************
      ***  jQuery event listeners *******************************************************************
      ************************************************************************************************/
+    var inputTime = parseTimeInputToDateObj(getUserTimeInput());
 
     $('.startTime').clockpicker({
         donetext: 'Done'
     });
 
     $('#stopButton').on('click', function() {
-        socket.emit('stop');
+        socket.emit('stop', inputTime);
     });
 
     $('#playButton').on('click', function() {
         
-        var inputTime = parseTimeInputToDateObj(getUserTimeInput());
          socket.emit('play',inputTime);
     });
 
     $('#pauseButton').on('click', function() {
-         socket.emit('pause');
+         socket.emit('pause', inputTime);
     });
 
 
@@ -31,7 +31,7 @@
      ************************************************************************************************/
      
     socket.on('pauseTimeClock', function (data) {
-        stopWatchClock.setPausedTime(data.time);
+       // stopWatchClock.setPausedTime(data.time);
         $('.pauseTime').fadeIn('slow').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
     });
 
@@ -57,6 +57,10 @@
      socket.on('currentTime', function (data) {
         $('.currentTimeClock').html(data.time.replace(/(\d)/g, '<span>$1</span>'))
       });
+      
+    socket.on('inPlayState', function (data) {
+        $('#inPlay').modal('show');
+    });
       
  
 
